@@ -15,19 +15,21 @@ class World {
   }
 
   void handleInput() {
-    if (keyPressed) {
-      if (key == 'w') {
-        z += stepSize;
-      } 
-      else if (key == 's') {
-        z -= stepSize;
-      }
-      else if (key == 'a') {
-        x -= stepSize;
-      }
-      else if (key == 'd') {
-        x += stepSize;
-      }
+    //forward
+    if (eventManager.hasKey('w') ) {
+      z -= stepSize;
+    } 
+    //backward
+    if (eventManager.hasKey('s') ) {
+      z += stepSize;
+    }
+    //go left
+    if (eventManager.hasKey('a') ) {
+      x -= stepSize;
+    }
+    //go right
+    if (eventManager.hasKey('d') ) {
+      x += stepSize;
     }
   }
 }
