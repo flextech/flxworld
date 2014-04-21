@@ -28,6 +28,9 @@ class IntegerSet {
   }
 
   void remove(int value) {
+    if (values.length == 0) {
+      return;
+    }
     int[] newValues = new int[values.length - 1];
     int newIndex = 0;
     for (int i = 0; i < values.length; ++i ) {
@@ -39,4 +42,3 @@ class IntegerSet {
     values = newValues;
   }
 }
-
