@@ -1,35 +1,55 @@
 class World {
-  Block aBlock;
-  float x, z;
-  float stepSize = 3;
+  ArrayList<Visible> visibles;
+  float x, y, z;
+  float heading = 0;
+  float stepSize = 10;
+  float headingStep = 0.04;
 
   World() {
-    aBlock = new Block(100, -50, 0, 100, 200, 50);
+    x = y = z = 0;
+    visibles = new ArrayList<Visible>();
+    float blockSize = width / 6;
+    float blockSpacing = blockSize * 2;
+    for (int i = 2; i <5 ; ++i) {
+      visibles.add(new Block(blockSpacing * i, 0, 0, blockSize, blockSize, blockSize, color(255, 0, 0)));
+      visibles.add(new Block(-blockSpacing * i, 0, 0, blockSize, blockSize, blockSize, color(255, 200, 200)));
+      visibles.add(new Block(0, 0, blockSpacing * i, blockSize, blockSize, blockSize, color(0, 0, 255)));
+      visibles.add(new Block(0, 0, -blockSpacing * i, blockSize, blockSize, blockSize, color(200, 200, 255)));
+    }
   }
 
   void draw() {
     background(200);
-    translate(width/2 - x, height/2, z);
     handleInput();
-    aBlock.draw();
+ 
+    //draw visibles
+    translate(width/2, height/2, 0);
+    rotateY(heading);
+    float pixelsBelowEyeLevel = 60;
+    camera(x, y - pixelsBelowEyeLevel, z, x - cos(heading), y - pixelsBelowEyeLevel, z - sin(heading), 0.0, 1.0, 0.0);
+    for (Visible visible : visibles) {
+      visible.draw();
+    }
   }
 
   void handleInput() {
     //forward
     if (eventManager.hasKey('w') ) {
-      z -= stepSize;
+      x -= stepSize * cos(heading);
+      z -= stepSize * sin(heading);
     } 
     //backward
     if (eventManager.hasKey('s') ) {
-      z += stepSize;
+      x += stepSize * cos(heading);
+      z += stepSize * sin(heading);
     }
-    //go left
+    //turn left
     if (eventManager.hasKey('a') ) {
-      x -= stepSize;
+      heading -= headingStep ;
     }
-    //go right
+    //turn right
     if (eventManager.hasKey('d') ) {
-      x += stepSize;
+      heading += headingStep;
     }
   }
 }
