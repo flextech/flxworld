@@ -10,18 +10,31 @@ class World {
     visibles = new ArrayList<Visible>();
     //create some colored blocks so we have something to look at
     float blockSize = width / 6;
+    float yBlockCenter = -blockSize /2 ;
     float blockSpacing = blockSize * 2;
     for (int i = 2; i <5 ; ++i) {
-      visibles.add(new Block(blockSpacing * i, 0, 0, blockSize, blockSize, blockSize, color(255, 0, 0)));
-      visibles.add(new Block(-blockSpacing * i, 0, 0, blockSize, blockSize, blockSize, color(255, 200, 200)));
-      visibles.add(new Block(0, 0, blockSpacing * i, blockSize, blockSize, blockSize, color(0, 0, 255)));
-      visibles.add(new Block(0, 0, -blockSpacing * i, blockSize, blockSize, blockSize, color(200, 200, 255)));
+      visibles.add(new Block(blockSpacing * i, yBlockCenter, 0, blockSize, blockSize, blockSize, color(255, 0, 0)));
+      visibles.add(new Block(-blockSpacing * i, yBlockCenter, 0, blockSize, blockSize, blockSize, color(255, 200, 200)));
+      visibles.add(new Block(0, yBlockCenter, blockSpacing * i, blockSize, blockSize, blockSize, color(0, 0, 255)));
+      visibles.add(new Block(0, yBlockCenter, -blockSpacing * i, blockSize, blockSize, blockSize, color(200, 200, 255)));
     }
   }
 
   void draw() {
-    background(200);
     handleInput();
+
+    //draw sky
+    float secondsPerDay = 30;
+    float skyBlueLevel = map(sin(millis()*0.001* 2 * PI / secondsPerDay), -1, 1, 100, 255);
+    float skyRedLevel = skyBlueLevel * 0.3;
+    float skyGreenLevel = skyBlueLevel * 0.8;
+    background(skyRedLevel, skyGreenLevel, skyBlueLevel);
+
+    //draw ground
+    fill(0,200,0);
+    rotateX(PI / 2 );
+    ellipse(0,0,width * 100, width * 100);
+    rotateX(-PI / 2 );
 
     //draw visibles
     translate(width/2, height/2, 0);
