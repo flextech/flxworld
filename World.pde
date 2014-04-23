@@ -22,7 +22,7 @@ class World {
   void draw() {
     background(200);
     handleInput();
- 
+
     //draw visibles
     translate(width/2, height/2, 0);
     rotateY(heading);
@@ -51,6 +51,19 @@ class World {
     //turn right
     if (eventManager.hasKey('d') ) {
       heading += headingStep;
+    }
+    //go up
+    if (eventManager.hasKey(' ') ) {
+      y -= stepSize ;
+    } 
+    else {
+      //fall back down, but don't fall below zero level.
+      if ( y < 0) {
+        y += stepSize;
+      } 
+      else {
+        y = 0;
+      }
     }
   }
 }
