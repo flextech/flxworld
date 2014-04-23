@@ -1,4 +1,9 @@
 class IntegerSet {
+  // An IntegerSet is, not surprisingly, a SET of integers.
+  // That means that unlike a list or array, elements are
+  // not repeated. 
+  //If you try to add an element already in the 
+  // set, it will ignore you.
   int[] values = new int[0];
 
   void add(int value) {
@@ -28,6 +33,10 @@ class IntegerSet {
   }
 
   void remove(int value) {
+    if (values.length == 0) {
+      //empty, so nothing to remove
+      return;
+    }
     int[] newValues = new int[values.length - 1];
     int newIndex = 0;
     for (int i = 0; i < values.length; ++i ) {
@@ -39,4 +48,3 @@ class IntegerSet {
     values = newValues;
   }
 }
-

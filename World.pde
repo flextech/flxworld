@@ -1,13 +1,14 @@
 class World {
   ArrayList<Visible> visibles;
-  float x, y, z;
-  float heading = 0;
-  float stepSize = 10;
-  float headingStep = 0.04;
+  float x, y, z;//position of Observer in space
+  float heading = 0;//initial heading
+  float stepSize = 10;//position increment when moving
+  float headingStep = 0.04;//angle increment when turning
 
   World() {
     x = y = z = 0;
     visibles = new ArrayList<Visible>();
+    //create some colored blocks so we have something to look at
     float blockSize = width / 6;
     float blockSpacing = blockSize * 2;
     for (int i = 2; i <5 ; ++i) {

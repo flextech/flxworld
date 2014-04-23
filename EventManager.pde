@@ -1,4 +1,6 @@
 class EventManager {
+  // An EventManager keeps track of which keys are currently pressed.
+  
   IntegerSet keySet = new IntegerSet();
 
   void keyPressed() {
@@ -13,4 +15,3 @@ class EventManager {
     return keySet.hasValue(c);
   }
 }
-
