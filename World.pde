@@ -4,10 +4,12 @@ class World {
   float heading = 0;//initial heading
   float stepSize = 10;//position increment when moving
   float headingStep = 0.04;//angle increment when turning
+  float secondsPerDay = 30;
 
   World() {
     x = y = z = 0;
     visibles = new ArrayList<Visible>();
+
     //create some colored blocks so we have something to look at
     float blockSize = width / 6;
     float yBlockCenter = -blockSize /2 ;
@@ -18,22 +20,24 @@ class World {
       visibles.add(new Block(0, yBlockCenter, blockSpacing * i, blockSize, blockSize, blockSize, color(0, 0, 255)));
       visibles.add(new Block(0, yBlockCenter, -blockSpacing * i, blockSize, blockSize, blockSize, color(200, 200, 255)));
     }
+
+    //Let's look at a yellow sphere!
+    visibles.add(new Sphere(0, 0, 0, 50, color(255, 255, 0)));
   }
 
   void draw() {
     handleInput();
 
     //draw sky
-    float secondsPerDay = 30;
-    float skyBlueLevel = map(sin(millis()*0.001* 2 * PI / secondsPerDay), -1, 1, 100, 255);
+    float skyBlueLevel = 255;//map(lightLevel(), 0, 1, 100, 255);
     float skyRedLevel = skyBlueLevel * 0.3;
     float skyGreenLevel = skyBlueLevel * 0.8;
     background(skyRedLevel, skyGreenLevel, skyBlueLevel);
 
     //draw ground
-    fill(0,200,0);
+    fill(0, 200, 0);
     rotateX(PI / 2 );
-    ellipse(0,0,width * 100, width * 100);
+    ellipse(0, 0, width * 2, width * 2);
     rotateX(-PI / 2 );
 
     //draw visibles
@@ -79,4 +83,9 @@ class World {
       }
     }
   }
+
+  float lightLevel() {
+    return map(sin(millis() * 0.001 * 2 * PI / secondsPerDay), -1, 1, 0, 1);
+  }
 }
+
