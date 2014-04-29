@@ -29,16 +29,19 @@ class World {
     handleInput();
 
     //draw sky
-    float skyBlueLevel = 255;//map(lightLevel(), 0, 1, 100, 255);
+    float skyBlueLevel = map(lightLevel(), 0, 1, 100, 255);
     float skyRedLevel = skyBlueLevel * 0.3;
     float skyGreenLevel = skyBlueLevel * 0.8;
     background(skyRedLevel, skyGreenLevel, skyBlueLevel);
 
     //draw ground
     fill(0, 200, 0);
+    float dY = 240;
+    translate(0, dY, 0);
     rotateX(PI / 2 );
-    ellipse(0, 0, width * 2, width * 2);
+    ellipse(0, 0, width * 20, width * 20);
     rotateX(-PI / 2 );
+    translate(0, -dY, 0);
 
     //draw visibles
     translate(width/2, height/2, 0);
