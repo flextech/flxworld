@@ -1,10 +1,12 @@
 class World {
   ArrayList<Visible> visibles;
+  ArrayList<Visible> visiblesToRemove;
   float x, y, z;//position of Observer in space
   float heading = 0;//initial heading
   float stepSize = 10;//position increment when moving
   float headingStep = 0.04;//angle increment when turning
   float secondsPerDay = 30;
+  int lastFireSignalInMillis = millis();
 
   World() {
     x = y = z = 0;
@@ -40,6 +42,14 @@ class World {
     ellipse(0, 0, width * 20, width * 20);
     rotateX(-PI / 2 );
 
+    //remove  Visibles scheduled for removal
+    if (visiblesToRemove != null) {
+      for (Visible visible : visiblesToRemove) {
+        visibles.remove(visible);
+      }
+      visiblesToRemove = null;
+    }
+
     //draw visibles
     translate(width/2, height/2, 0);
     rotateY(heading);
@@ -51,6 +61,18 @@ class World {
   }
 
   void handleInput() {
+    //fire
+    if (eventManager.hasKey('f') ) {
+      int millisSinceLastFiring = millis() - lastFireSignalInMillis;
+      if (millisSinceLastFiring > 500f) {
+        //it's been long enough, let's fire another
+        lastFireSignalInMillis = millis();
+        float radius = 3;
+        float speed = 50;
+        int clr = color(0, 0, 200);
+        visibles.add(new Projectile(radius, speed, clr));
+      }
+    } 
     //forward
     if (eventManager.hasKey('w') ) {
       x -= stepSize * cos(heading);
@@ -87,6 +109,14 @@ class World {
 
   float lightLevel() {
     return map(sin(millis() * 0.001 * 2 * PI / secondsPerDay), -1, 1, 0, 1);
+  }
+
+  void removeVisible(Visible visible) {
+    if (visiblesToRemove == null) {
+      //lazy initialize
+      visiblesToRemove = new ArrayList<Visible>();
+    }
+    visiblesToRemove.add(visible);
   }
 }
 
