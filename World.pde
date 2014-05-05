@@ -27,6 +27,13 @@ class World {
     visibles.add(new Sphere(0, 0, 0, 50, color(255, 255, 0)));
   }
 
+  boolean runningViaJavascript() {
+    int a = 1;
+    int b = 2;
+    int c = a / b;
+    return c != 0;
+  }
+
   void draw() {
     handleInput();
 
@@ -37,6 +44,9 @@ class World {
     background(skyRedLevel, skyGreenLevel, skyBlueLevel);
 
     //draw ground
+    if (runningViaJavascript()) {
+      translate(0, 240 - y, 0);
+    }
     fill(0, 200, 0);
     rotateX(PI / 2 );
     ellipse(0, 0, width * 20, width * 20);
