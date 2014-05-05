@@ -42,9 +42,11 @@ class IntegerSet {
     for (int i = 0; i < values.length; ++i ) {
       if (values[i] != value) {
         //copy, don't remove
-        newValues[newIndex++] = values[i];
+        if (newIndex < newValues.length)
+          newValues[newIndex++] = values[i];
       }
     }
     values = newValues;
   }
 }
+
