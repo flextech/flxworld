@@ -71,6 +71,7 @@ class World {
   }
 
   void handleInput() {
+    println("handle");
     //fire
     if (eventManager.hasKey('f') ) {
       int millisSinceLastFiring = millis() - lastFireSignalInMillis;
@@ -78,7 +79,7 @@ class World {
         //it's been long enough, let's fire another
         lastFireSignalInMillis = millis();
         float radius = 3;
-        float speed = 50;
+        float speed = 150;
         int clr = color(0, 0, 200);
         visibles.add(new Projectile(radius, speed, clr));
       }

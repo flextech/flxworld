@@ -20,15 +20,17 @@ class Projectile implements Visible {
     //or change the radius or color.
     //Can you get the sphere to blink on and off?
     float elapsedSeconds = (millis() - startTimeInMillis) * 0.001;
-    if (elapsedSeconds > 3 ) {
+    float dx = speed * cos(heading) * elapsedSeconds;
+    float dz = speed * sin(heading) * elapsedSeconds;
+    float newY = y -50 - (elapsedSeconds * 60 - 5 * elapsedSeconds * elapsedSeconds );
+
+    if (newY > 0 ) {
       world.removeVisible(this);
     } 
     else {
       pushMatrix();
       fill(clr);
-      float dx = speed * cos(heading) * elapsedSeconds;
-      float dz = speed * sin(heading) * elapsedSeconds;
-      translate(x - dx, y - 50, z - dz);
+      translate(x - dx, newY, z - dz);
       noStroke();
       sphere(radius);
       popMatrix();
