@@ -7,9 +7,15 @@ class World {
   float headingStep = 0.04;//angle increment when turning
   float secondsPerDay = 30;
   int lastFireSignalInMillis = millis();
+  float mouseXPrevious, mouseYPrevious, baseLookDownInPixels, lookDownInPixels;
 
   World() {
     x = y = z = 0;
+    mouseXPrevious = width/2;
+    mouseYPrevious = height/2;
+    baseLookDownInPixels = 60;
+    baseLookDownInPixels = 60;
+    lookDownInPixels = baseLookDownInPixels;
     visibles = new ArrayList<Visible>();
 
     //create some colored blocks so we have something to look at
@@ -63,15 +69,24 @@ class World {
     //draw visibles
     translate(width/2, height/2, 0);
     rotateY(heading);
-    float pixelsBelowEyeLevel = 60;
-    camera(x, y - pixelsBelowEyeLevel, z, x - cos(heading), y - pixelsBelowEyeLevel, z - sin(heading), 0.0, 1.0, 0.0);
+    camera(x, y - baseLookDownInPixels, z, x - cos(heading), y - lookDownInPixels, z - sin(heading), 0.0, 1.0, 0.0);
     for (Visible visible : visibles) {
       visible.draw();
     }
   }
 
   void handleInput() {
-    println("handle");
+    //set camera tilt up/down
+    float ySensitivity=4;
+    float cameraChange=ySensitivity*(mouseY-mouseYPrevious)/height;
+    lookDownInPixels -=cameraChange;
+    mouseYPrevious=mouseY;
+
+    //turn left/right
+    float Xsensitivity=10;
+    float headingChange=Xsensitivity*(mouseX-mouseXPrevious)/width;
+    heading+=headingChange;
+    mouseXPrevious=mouseX;
     //fire
     if (eventManager.hasKey('f') ) {
       int millisSinceLastFiring = millis() - lastFireSignalInMillis;
@@ -79,7 +94,7 @@ class World {
         //it's been long enough, let's fire another
         lastFireSignalInMillis = millis();
         float radius = 3;
-        float speed = 150;
+        float speed = 550;
         int clr = color(0, 0, 200);
         visibles.add(new Projectile(radius, speed, clr));
       }
@@ -94,13 +109,16 @@ class World {
       x += stepSize * cos(heading);
       z += stepSize * sin(heading);
     }
-    //turn left
+    //strafe left
     if (eventManager.hasKey('a') ) {
-      heading -= headingStep ;
+      x -= stepSize * sin(heading);
+      z += stepSize * cos(heading);
     }
-    //turn right
+    //strafe right
     if (eventManager.hasKey('d') ) {
-      heading += headingStep;
+      //heading += headingStep;
+      x += stepSize * sin(heading);
+      z -= stepSize * cos(heading);
     }
     //go up
     if (eventManager.hasKey(' ') ) {
@@ -117,6 +135,7 @@ class World {
       }
     }
   }
+
 
   float lightLevel() {
     return map(sin(millis() * 0.001 * 2 * PI / secondsPerDay), -1, 1, 0, 1);

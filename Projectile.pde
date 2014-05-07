@@ -1,5 +1,5 @@
 class Projectile implements Visible {
-  float x, y, z, heading, radius, speed;
+  float x, y, z, heading, radius, speed, verticalSpeed;
   int startTimeInMillis, clr;
 
   Projectile(float r_, float speed_, int clr_) {
@@ -13,6 +13,7 @@ class Projectile implements Visible {
     y = world.y;
     z = world.z;
     heading = world.heading;
+    verticalSpeed=400*(world.lookDownInPixels-60);
   }
 
   void draw() {
@@ -22,7 +23,8 @@ class Projectile implements Visible {
     float elapsedSeconds = (millis() - startTimeInMillis) * 0.001;
     float dx = speed * cos(heading) * elapsedSeconds;
     float dz = speed * sin(heading) * elapsedSeconds;
-    float newY = y -50 - (elapsedSeconds * 60 - 5 * elapsedSeconds * elapsedSeconds );
+    float gravity=50;
+    float newY = y -50 - (elapsedSeconds * verticalSpeed -gravity * elapsedSeconds * elapsedSeconds );
 
     if (newY > 0 ) {
       world.removeVisible(this);
@@ -37,4 +39,3 @@ class Projectile implements Visible {
     }
   }
 }
-
